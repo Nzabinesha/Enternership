@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isFounder() {
+      return isSignedIn() && getUserData().role == 'founder';
+    }
+
+    function isVerifiedFounder() {
+      return isFounder();
+    }
+
+    // ── Users collection ────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+      allow delete: if false;
+    }
+
+    // ── Startups collection ─────────────────────────────────────────────
+    match /startups/{startupId} {
+      allow read: if isSignedIn();
+      // Only founders can create startups
+      allow create: if isFounder() && request.resource.data.founderId == request.auth.uid;
+      // Only the startup's founder can update their startup
+      allow update: if isSignedIn() && resource.data.founderId == request.auth.uid;
+      // Admins can verify (set isVerified=true) — in production use Admin SDK
+      allow delete: if false;
+    }
+
+    // ── Opportunities collection ────────────────────────────────────────
+    match /opportunities/{oppId} {
+      allow read: if isSignedIn();
+      // Only verified founders can post opportunities
+      allow create: if isFounder();
+      // Only the startup founder can update their own opportunities
+      allow update: if isSignedIn() &&
+        get(/databases/$(database)/documents/startups/$(resource.data.startupId)).data.founderId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    // ── Applications collection ─────────────────────────────────────────
+    match /applications/{appId} {
+      // Students can read their own applications; founders can read applications for their startups
+      allow read: if isSignedIn() && (
+        resource.data.studentId == request.auth.uid ||
+        get(/databases/$(database)/documents/startups/$(resource.data.startupId)).data.founderId == request.auth.uid
+      );
+      // Only students can submit applications
+      allow create: if isSignedIn() &&
+        request.resource.data.studentId == request.auth.uid &&
+        getUserData().role == 'student';
+      // Founders can update status; students can delete (withdraw) their own
+      allow update: if isSignedIn() &&
+        get(/databases/$(database)/documents/startups/$(resource.data.startupId)).data.founderId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.studentId == request.auth.uid;
+    }
+  }
+}
