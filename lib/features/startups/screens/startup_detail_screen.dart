@@ -83,8 +83,9 @@ class StartupDetailScreen extends ConsumerWidget {
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(body: Center(child: Text('Error: $e'))),
       data: (startup) {
-        if (startup == null)
+        if (startup == null) {
           return const Scaffold(body: Center(child: Text('Startup not found')));
+        }
         return Scaffold(
           backgroundColor: AppColors.background,
           body: CustomScrollView(

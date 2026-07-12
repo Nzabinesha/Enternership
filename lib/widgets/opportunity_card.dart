@@ -36,7 +36,8 @@ class OpportunityCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                StartupAvatar(name: o.startupName, logoUrl: o.startupLogoUrl, size: 40),
+                StartupAvatar(
+                    name: o.startupName, logoUrl: o.startupLogoUrl, size: 40),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -46,12 +47,16 @@ class OpportunityCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(o.startupName,
-                                style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.textSecondary,
+                                    fontWeight: FontWeight.w500),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                           if (o.startupVerified)
-                            const Icon(Icons.verified, size: 14, color: AppColors.primary),
+                            const Icon(Icons.verified,
+                                size: 14, color: AppColors.primary),
                         ],
                       ),
                       const SizedBox(height: 2),
@@ -67,7 +72,8 @@ class OpportunityCard extends StatelessWidget {
                   onTap: onBookmark,
                   child: Icon(
                     isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                    color: isBookmarked ? AppColors.primary : AppColors.textMuted,
+                    color:
+                        isBookmarked ? AppColors.primary : AppColors.textMuted,
                     size: 20,
                   ),
                 ),
@@ -80,8 +86,10 @@ class OpportunityCard extends StatelessWidget {
               children: [
                 _Tag(label: o.typeLabel, color: AppColors.primary),
                 _Tag(label: o.role, color: AppColors.textSecondary),
-                if (o.isRemote) _Tag(label: 'Remote', color: AppColors.success),
-                if (o.isPaid) _Tag(label: 'Paid', color: AppColors.accent),
+                if (o.isRemote)
+                  const _Tag(label: 'Remote', color: AppColors.success),
+                if (o.isPaid)
+                  const _Tag(label: 'Paid', color: AppColors.accent),
               ],
             ),
             const SizedBox(height: 10),
@@ -89,23 +97,33 @@ class OpportunityCard extends StatelessWidget {
               Wrap(
                 spacing: 6,
                 runSpacing: 4,
-                children: o.requiredSkills.take(4).map((s) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(s, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
-                )).toList(),
+                children: o.requiredSkills
+                    .take(4)
+                    .map((s) => Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceVariant,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(s,
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.textSecondary)),
+                        ))
+                    .toList(),
               ),
             const SizedBox(height: 10),
             const Divider(height: 1),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.timer_outlined, size: 13, color: AppColors.textMuted),
+                const Icon(Icons.timer_outlined,
+                    size: 13, color: AppColors.textMuted),
                 const SizedBox(width: 4),
-                Text(o.duration, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+                Text(o.duration,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textMuted)),
                 const Spacer(),
                 Icon(
                   Icons.event_outlined,
@@ -114,7 +132,9 @@ class OpportunityCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  o.isExpired ? 'Expired' : 'Due ${DateFormat('MMM d').format(o.deadline)}',
+                  o.isExpired
+                      ? 'Expired'
+                      : 'Due ${DateFormat('MMM d').format(o.deadline)}',
                   style: TextStyle(
                     fontSize: 12,
                     color: o.isExpired ? AppColors.accent : AppColors.textMuted,
@@ -144,7 +164,9 @@ class _Tag extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
         border: Border.all(color: color.withOpacity(0.2)),
       ),
-      child: Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w500)),
+      child: Text(label,
+          style: TextStyle(
+              fontSize: 11, color: color, fontWeight: FontWeight.w500)),
     );
   }
 }

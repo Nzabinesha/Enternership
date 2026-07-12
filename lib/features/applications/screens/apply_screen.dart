@@ -132,8 +132,9 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                       alignLabelWithHint: true,
                     ),
                     validator: (v) {
-                      if (v == null || v.trim().length < 100)
+                      if (v == null || v.trim().length < 100) {
                         return 'Write at least 100 characters';
+                      }
                       return null;
                     },
                   ),

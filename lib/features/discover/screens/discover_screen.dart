@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:alu_enternership_pro/core/theme/app_theme.dart';
 import 'package:alu_enternership_pro/providers/providers.dart';
-import 'package:alu_enternership_pro/core/models/opportunity.dart';
 import 'package:alu_enternership_pro/widgets/opportunity_card.dart';
 import 'package:alu_enternership_pro/widgets/filter_sheet.dart';
 import 'package:alu_enternership_pro/widgets/shimmer_loader.dart';

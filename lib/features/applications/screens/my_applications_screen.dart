@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:alu_enternership_pro/widgets/shimmer_loader.dart';
+import 'package:alu_enternership_pro/core/theme/app_theme.dart';
 import 'package:alu_enternership_pro/providers/providers.dart';
 import 'package:alu_enternership_pro/core/models/application.dart';
-import 'package:alu_enternership_pro/core/theme/app_theme.dart';
+import 'package:alu_enternership_pro/widgets/shimmer_loader.dart';
 
 class MyApplicationsScreen extends ConsumerWidget {
   const MyApplicationsScreen({super.key});
@@ -235,13 +235,66 @@ class _AppCard extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: 8),
-          Text(
-            'Applied ${timeago.format(app.appliedAt)}',
-            style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+          Row(
+            children: [
+              Text(
+                'Applied \${timeago.format(app.appliedAt)}',
+                style:
+                    const TextStyle(fontSize: 11, color: AppColors.textMuted),
+              ),
+              const Spacer(),
+              if (app.status == ApplicationStatus.applied)
+                GestureDetector(
+                  onTap: () => _confirmWithdraw(context, ref),
+                  child: const Text(
+                    'Withdraw',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _confirmWithdraw(BuildContext context, WidgetRef ref) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Withdraw application'),
+        content: Text(
+            'Are you sure you want to withdraw your application for "\${app.opportunityTitle}"?'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Withdraw',
+                  style: TextStyle(color: AppColors.accent))),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+    try {
+      await ref
+          .read(applicationRepositoryProvider)
+          .withdrawApplication(app.id, app.opportunityId);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Application withdrawn.')));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Error: \$e')));
+      }
+    }
   }
 }
 

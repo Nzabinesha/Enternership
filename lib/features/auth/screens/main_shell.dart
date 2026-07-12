@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:alu_enternership_pro/core/theme/app_theme.dart';
 import 'package:alu_enternership_pro/providers/providers.dart';
-import 'package:alu_enternership_pro/widgets/alu_logo.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   final Widget child;
@@ -38,6 +37,12 @@ class _MainShellState extends ConsumerState<MainShell> {
       activeIcon: Icons.assignment
     ),
     (
+      path: '/admin',
+      label: 'Admin',
+      icon: Icons.admin_panel_settings_outlined,
+      activeIcon: Icons.admin_panel_settings
+    ),
+    (
       path: '/profile',
       label: 'Profile',
       icon: Icons.person_outline,
@@ -66,6 +71,12 @@ class _MainShellState extends ConsumerState<MainShell> {
       activeIcon: Icons.people
     ),
     (
+      path: '/admin',
+      label: 'Admin',
+      icon: Icons.admin_panel_settings_outlined,
+      activeIcon: Icons.admin_panel_settings
+    ),
+    (
       path: '/profile',
       label: 'Profile',
       icon: Icons.person_outline,
@@ -76,9 +87,47 @@ class _MainShellState extends ConsumerState<MainShell> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider).value;
+    final unreadCount = ref.watch(unreadNotificationCountProvider).value ?? 0;
     final tabs = user?.isFounder == true ? _founderTabs : _studentTabs;
 
     return Scaffold(
+      // Notification bell - visible on all main screens
+      floatingActionButton: FloatingActionButton.small(
+        heroTag: 'notif_fab',
+        backgroundColor: AppColors.white,
+        elevation: 2,
+        onPressed: () => context.push('/notifications'),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.primary,
+              size: 22,
+            ),
+            if (unreadCount > 0)
+              Positioned(
+                right: -4,
+                top: -4,
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    color: AppColors.accent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    unreadCount > 9 ? '9+' : '$unreadCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -101,6 +150,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                 final idx = e.key;
                 final tab = e.value;
                 final selected = _currentIndex == idx;
+
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {

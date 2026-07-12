@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:alu_enternership_pro/core/theme/app_theme.dart';
 import 'package:alu_enternership_pro/providers/providers.dart';
-import 'package:alu_enternership_pro/core/models/opportunity.dart';
-import 'package:alu_enternership_pro/core/models/application.dart';
 import 'package:alu_enternership_pro/widgets/startup_avatar.dart';
 
 class OpportunityDetailScreen extends ConsumerWidget {
@@ -23,8 +21,9 @@ class OpportunityDetailScreen extends ConsumerWidget {
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(body: Center(child: Text('Error: $e'))),
       data: (opp) {
-        if (opp == null)
+        if (opp == null) {
           return const Scaffold(body: Center(child: Text('Not found')));
+        }
 
         final hasAppliedAsync = user != null
             ? ref.watch(hasAppliedProvider(

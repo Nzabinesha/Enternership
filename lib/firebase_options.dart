@@ -62,7 +62,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '805204885648',
     projectId: 'alu-internship-platform',
     storageBucket: 'alu-internship-platform.firebasestorage.app',
-    iosClientId: '805204885648-44hd537vkb7gmsupmep9rp2oq6hh52rr.apps.googleusercontent.com',
+    iosClientId:
+        '805204885648-44hd537vkb7gmsupmep9rp2oq6hh52rr.apps.googleusercontent.com',
     iosBundleId: 'com.example.aluEnternershipPro',
   );
   static const FirebaseOptions macos = FirebaseOptions(
@@ -71,7 +72,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '805204885648',
     projectId: 'alu-internship-platform',
     storageBucket: 'alu-internship-platform.firebasestorage.app',
-    iosClientId: '805204885648-44hd537vkb7gmsupmep9rp2oq6hh52rr.apps.googleusercontent.com',
+    iosClientId:
+        '805204885648-44hd537vkb7gmsupmep9rp2oq6hh52rr.apps.googleusercontent.com',
     iosBundleId: 'com.example.aluEnternershipPro',
   );
 

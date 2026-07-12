@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/application.dart';
+import '../models/notification.dart';
 
 class ApplicationRepository {
   final FirebaseFirestore _db;
@@ -34,23 +35,88 @@ class ApplicationRepository {
 
   Future<void> submitApplication(Application app) async {
     await _col.add(app.toMap());
-    await _db.collection('opportunities').doc(app.opportunityId).update({
-      'applicationCount': FieldValue.increment(1),
-    });
+    // Increment application count on the opportunity
+    await _db
+        .collection('opportunities')
+        .doc(app.opportunityId)
+        .update({'applicationCount': FieldValue.increment(1)});
+
+    // Notify the startup founder
+    final notif = AppNotification(
+      id: '',
+      userId: '', // will be set to founderId by looking up startup
+      title: 'New application received',
+      body:
+          '${app.studentName} applied for "${app.opportunityTitle}" at ${app.startupName}.',
+      type: NotificationType.applicationReceived,
+      createdAt: DateTime.now(),
+      actionId: app.opportunityId,
+    );
+    // Get the founder's userId from the startup document
+    final startupDoc =
+        await _db.collection('startups').doc(app.startupId).get();
+    if (startupDoc.exists) {
+      final founderId =
+          (startupDoc.data() as Map<String, dynamic>)['founderId'] as String?;
+      if (founderId != null) {
+        await _db.collection('notifications').add(
+              notif.toMap()..['userId'] = founderId,
+            );
+      }
+    }
   }
 
-  Future<void> updateStatus(String appId, ApplicationStatus status, {String? note}) async {
+  // Update application status and notify the student
+  Future<void> updateStatus(
+    String appId,
+    ApplicationStatus status, {
+    String? note,
+    required String studentId,
+    required String opportunityTitle,
+    required String startupName,
+  }) async {
     await _col.doc(appId).update({
       'status': status.name,
       'updatedAt': Timestamp.now(),
       if (note != null) 'founderNote': note,
     });
+
+    // Send in-app notification to the student
+    final statusLabel = _statusLabel(status);
+    final notif = AppNotification(
+      id: '',
+      userId: studentId,
+      title: 'Application update: $statusLabel',
+      body:
+          'Your application for "$opportunityTitle" at $startupName has been updated to $statusLabel.',
+      type: NotificationType.statusUpdated,
+      createdAt: DateTime.now(),
+      actionId: appId,
+    );
+    await _db.collection('notifications').add(notif.toMap());
   }
 
+  // Withdraw (delete) an application — completes CRUD with Delete
   Future<void> withdrawApplication(String appId, String opportunityId) async {
     await _col.doc(appId).delete();
-    await _db.collection('opportunities').doc(opportunityId).update({
-      'applicationCount': FieldValue.increment(-1),
-    });
+    await _db
+        .collection('opportunities')
+        .doc(opportunityId)
+        .update({'applicationCount': FieldValue.increment(-1)});
+  }
+
+  String _statusLabel(ApplicationStatus s) {
+    switch (s) {
+      case ApplicationStatus.applied:
+        return 'Applied';
+      case ApplicationStatus.reviewed:
+        return 'Under Review';
+      case ApplicationStatus.interview:
+        return 'Interview Stage';
+      case ApplicationStatus.accepted:
+        return 'Accepted';
+      case ApplicationStatus.rejected:
+        return 'Not Selected';
+    }
   }
 }

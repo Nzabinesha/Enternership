@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../../../core/theme/app_theme.dart';
-import '../../../providers/providers.dart';
-import '../../../core/models/application.dart';
+import 'package:alu_enternership_pro/core/theme/app_theme.dart';
+import 'package:alu_enternership_pro/providers/providers.dart';
+import 'package:alu_enternership_pro/core/models/application.dart';
 
 class ApplicantsScreen extends ConsumerWidget {
   final String opportunityId;
@@ -244,9 +244,13 @@ class _ApplicantCard extends ConsumerWidget {
   Future<void> _updateStatus(
       BuildContext context, WidgetRef ref, ApplicationStatus newStatus) async {
     try {
-      await ref
-          .read(applicationRepositoryProvider)
-          .updateStatus(app.id, newStatus);
+      await ref.read(applicationRepositoryProvider).updateStatus(
+            app.id,
+            newStatus,
+            studentId: app.studentId,
+            opportunityTitle: app.opportunityTitle,
+            startupName: app.startupName,
+          );
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context)

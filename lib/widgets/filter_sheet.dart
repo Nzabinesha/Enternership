@@ -23,15 +23,26 @@ class FilterSheet extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Container(width: 36, height: 4, decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(2))),
+            child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(2))),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Text('Filter opportunities', style: Theme.of(context).textTheme.headlineMedium),
+              Text('Filter opportunities',
+                  style: Theme.of(context).textTheme.headlineMedium),
               const Spacer(),
               if (filter.hasActiveFilters)
-                TextButton(onPressed: () { notifier.clearAll(); Navigator.pop(context); }, child: const Text('Clear all')),
+                TextButton(
+                    onPressed: () {
+                      notifier.clearAll();
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Clear all')),
             ],
           ),
           const SizedBox(height: 20),
@@ -56,8 +67,12 @@ class FilterSheet extends ConsumerWidget {
                 onSelected: (_) => notifier.setType(selected ? null : t),
                 selectedColor: AppColors.primary.withOpacity(0.12),
                 checkmarkColor: AppColors.primary,
-                labelStyle: TextStyle(color: selected ? AppColors.primary : AppColors.textSecondary, fontWeight: selected ? FontWeight.w600 : FontWeight.w400),
-                side: BorderSide(color: selected ? AppColors.primary : AppColors.divider),
+                labelStyle: TextStyle(
+                    color:
+                        selected ? AppColors.primary : AppColors.textSecondary,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400),
+                side: BorderSide(
+                    color: selected ? AppColors.primary : AppColors.divider),
               );
             }).toList(),
           ),
@@ -69,7 +84,14 @@ class FilterSheet extends ConsumerWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: ['Software Developer', 'UI/UX Designer', 'Marketing', 'Data & Research', 'Operations', 'Content Creator'].map((r) {
+            children: [
+              'Software Developer',
+              'UI/UX Designer',
+              'Marketing',
+              'Data & Research',
+              'Operations',
+              'Content Creator'
+            ].map((r) {
               final selected = filter.role == r;
               return FilterChip(
                 label: Text(r),
@@ -77,8 +99,12 @@ class FilterSheet extends ConsumerWidget {
                 onSelected: (_) => notifier.setRole(selected ? null : r),
                 selectedColor: AppColors.primary.withOpacity(0.12),
                 checkmarkColor: AppColors.primary,
-                labelStyle: TextStyle(color: selected ? AppColors.primary : AppColors.textSecondary, fontWeight: selected ? FontWeight.w600 : FontWeight.w400),
-                side: BorderSide(color: selected ? AppColors.primary : AppColors.divider),
+                labelStyle: TextStyle(
+                    color:
+                        selected ? AppColors.primary : AppColors.textSecondary,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400),
+                side: BorderSide(
+                    color: selected ? AppColors.primary : AppColors.divider),
               );
             }).toList(),
           ),
@@ -87,8 +113,14 @@ class FilterSheet extends ConsumerWidget {
           // Toggles
           Text('Preferences', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
-          _Toggle(label: 'Paid only', value: filter.isPaidOnly, onChanged: (_) => notifier.togglePaid()),
-          _Toggle(label: 'Remote only', value: filter.isRemoteOnly, onChanged: (_) => notifier.toggleRemote()),
+          _Toggle(
+              label: 'Paid only',
+              value: filter.isPaidOnly,
+              onChanged: (_) => notifier.togglePaid()),
+          _Toggle(
+              label: 'Remote only',
+              value: filter.isRemoteOnly,
+              onChanged: (_) => notifier.toggleRemote()),
           const SizedBox(height: 20),
 
           // Skills
@@ -97,7 +129,16 @@ class FilterSheet extends ConsumerWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: ['Flutter', 'Python', 'Figma', 'React', 'Marketing', 'Finance', 'Research', 'SQL'].map((s) {
+            children: [
+              'Flutter',
+              'Python',
+              'Figma',
+              'React',
+              'Marketing',
+              'Finance',
+              'Research',
+              'SQL'
+            ].map((s) {
               final selected = filter.skills.contains(s);
               return FilterChip(
                 label: Text(s),
@@ -105,8 +146,11 @@ class FilterSheet extends ConsumerWidget {
                 onSelected: (_) => notifier.toggleSkill(s),
                 selectedColor: AppColors.primary.withOpacity(0.12),
                 checkmarkColor: AppColors.primary,
-                labelStyle: TextStyle(color: selected ? AppColors.primary : AppColors.textSecondary),
-                side: BorderSide(color: selected ? AppColors.primary : AppColors.divider),
+                labelStyle: TextStyle(
+                    color:
+                        selected ? AppColors.primary : AppColors.textSecondary),
+                side: BorderSide(
+                    color: selected ? AppColors.primary : AppColors.divider),
               );
             }).toList(),
           ),
@@ -130,7 +174,8 @@ class _Toggle extends StatelessWidget {
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
-  const _Toggle({required this.label, required this.value, required this.onChanged});
+  const _Toggle(
+      {required this.label, required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +183,10 @@ class _Toggle extends StatelessWidget {
       children: [
         Text(label, style: Theme.of(context).textTheme.bodyLarge),
         const Spacer(),
-        Switch(value: value, onChanged: onChanged, activeColor: AppColors.primary),
+        Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: AppColors.primary),
       ],
     );
   }

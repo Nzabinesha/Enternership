@@ -17,8 +17,9 @@ class ProfileScreen extends ConsumerWidget {
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(body: Center(child: Text('Error: $e'))),
       data: (user) {
-        if (user == null)
+        if (user == null) {
           return const Scaffold(body: Center(child: Text('Not signed in')));
+        }
         return Scaffold(
           backgroundColor: AppColors.background,
           body: CustomScrollView(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '/../core/theme/app_theme.dart';
-import '/../providers/providers.dart';
-import '/../core/models/startup.dart';
-import '/../widgets/startup_avatar.dart';
-import '/../widgets/shimmer_loader.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../providers/providers.dart';
+import '../../../core/models/startup.dart';
+import '../../../widgets/startup_avatar.dart';
+import '../../../widgets/shimmer_loader.dart';
 
 class StartupsScreen extends ConsumerWidget {
   const StartupsScreen({super.key});

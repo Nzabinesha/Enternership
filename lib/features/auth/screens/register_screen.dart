@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:alu_enternership_pro/core/models/app_user.dart';
 import 'package:alu_enternership_pro/providers/providers.dart';
 import 'package:alu_enternership_pro/core/theme/app_theme.dart';
-import 'package:alu_enternership_pro/core/theme/app_theme.dart';
-import 'package:alu_enternership_pro/providers/providers.dart';
-import 'package:alu_enternership_pro/widgets/alu_logo.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -59,10 +56,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   String _friendlyError(String e) {
-    if (e.contains('email-already-in-use'))
+    if (e.contains('email-already-in-use')) {
       return 'An account with this email already exists.';
-    if (e.contains('weak-password'))
+    }
+    if (e.contains('weak-password')) {
       return 'Password is too weak. Use at least 6 characters.';
+    }
     return 'Registration failed. Please try again.';
   }
 
@@ -178,11 +177,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       border:
                           Border.all(color: AppColors.info.withOpacity(0.25)),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.info_outline,
+                        Icon(Icons.info_outline,
                             color: AppColors.info, size: 18),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             'Founder accounts require ALU verification before you can post opportunities. You\'ll complete this in your startup profile.',

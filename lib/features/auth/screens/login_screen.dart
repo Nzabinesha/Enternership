@@ -52,8 +52,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         e.contains('invalid-credential')) {
       return 'Incorrect email or password.';
     }
-    if (e.contains('too-many-requests'))
+    if (e.contains('too-many-requests')) {
       return 'Too many attempts. Try again later.';
+    }
     return 'Sign in failed. Check your connection and try again.';
   }
 

@@ -39,9 +39,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           .sendPasswordReset(_emailCtrl.text.trim());
       if (mounted) setState(() => _sent = true);
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         setState(() => _error =
             'Could not send reset email. Check the address and try again.');
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }

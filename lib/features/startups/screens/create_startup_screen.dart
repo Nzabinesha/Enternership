@@ -65,9 +65,10 @@ class _CreateStartupScreenState extends ConsumerState<CreateStartupScreen> {
         context.pop();
       }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -131,7 +132,7 @@ class _CreateStartupScreenState extends ConsumerState<CreateStartupScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _industry,
+                initialValue: _industry,
                 decoration: const InputDecoration(
                     labelText: 'Industry *',
                     prefixIcon: Icon(Icons.category_outlined)),

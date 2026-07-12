@@ -3,21 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/theme/app_theme.dart';
 import 'router.dart';
+// After running: flutterfire configure
+// uncomment the line below and add the import
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // TODO: Replace with your Firebase options from google-services.json
-  // Run: flutterfire configure
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  runApp(
-    const ProviderScope(
-      child: AluBridgeApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: AluBridgeApp()));
 }
 
 class AluBridgeApp extends ConsumerWidget {

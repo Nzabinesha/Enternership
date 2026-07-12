@@ -26,7 +26,7 @@ class _PostOpportunityScreenState extends ConsumerState<PostOpportunityScreen> {
   bool _isPaid = false;
   bool _isRemote = false;
   DateTime _deadline = DateTime.now().add(const Duration(days: 30));
-  List<String> _selectedSkills = [];
+  final List<String> _selectedSkills = [];
   bool _loading = false;
 
   @override
@@ -90,9 +90,10 @@ class _PostOpportunityScreenState extends ConsumerState<PostOpportunityScreen> {
         context.pop();
       }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -151,7 +152,7 @@ class _PostOpportunityScreenState extends ConsumerState<PostOpportunityScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _role,
+                initialValue: _role,
                 decoration: const InputDecoration(
                     labelText: 'Role category *',
                     prefixIcon: Icon(Icons.category_outlined)),
@@ -220,7 +221,7 @@ class _PostOpportunityScreenState extends ConsumerState<PostOpportunityScreen> {
                 value: _isPaid,
                 onChanged: (v) => setState(() => _isPaid = v),
                 title: const Text('This is a paid opportunity'),
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
                 contentPadding: EdgeInsets.zero,
               ),
               if (_isPaid) ...[
@@ -239,7 +240,7 @@ class _PostOpportunityScreenState extends ConsumerState<PostOpportunityScreen> {
                 value: _isRemote,
                 onChanged: (v) => setState(() => _isRemote = v),
                 title: const Text('Remote friendly'),
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
                 contentPadding: EdgeInsets.zero,
               ),
               if (!_isRemote) ...[

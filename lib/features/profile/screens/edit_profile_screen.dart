@@ -71,9 +71,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         context.pop();
       }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -172,8 +173,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 decoration: const InputDecoration(
                     labelText: 'LinkedIn URL', prefixIcon: Icon(Icons.link)),
                 validator: (v) {
-                  if (v != null && v.isNotEmpty && !v.startsWith('http'))
+                  if (v != null && v.isNotEmpty && !v.startsWith('http')) {
                     return 'Include https://';
+                  }
                   return null;
                 },
               ),
@@ -185,8 +187,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     labelText: 'Portfolio / GitHub URL',
                     prefixIcon: Icon(Icons.web_outlined)),
                 validator: (v) {
-                  if (v != null && v.isNotEmpty && !v.startsWith('http'))
+                  if (v != null && v.isNotEmpty && !v.startsWith('http')) {
                     return 'Include https://';
+                  }
                   return null;
                 },
               ),
